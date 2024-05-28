@@ -20,7 +20,6 @@ create table BICICLETA (
 	foreign key (dispositivo) references dispositivo(noserie)
 	);
 
-
 create table CLASSICA(
 	bicicleta integer, 
 	foreign key (bicicleta) references bicicleta(id),

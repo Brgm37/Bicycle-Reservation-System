@@ -8,9 +8,9 @@ interface IDispositivo {
     int getNoSerie();
     void setNoSerie(int noSerie);
     float getLatitude();
-    void setLatitude(Float latitude);
+    void setLatitude(float latitude);
     float getLongitude();
-    void setLongitude(Float longitude);
+    void setLongitude(float longitude);
 }
 
 @Entity
@@ -18,16 +18,16 @@ interface IDispositivo {
 public class Dispositivo implements IDispositivo{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer noSerie;
+    private int noSerie;
 
     @Column(nullable = false, precision = 6, scale = 4)
-    private Float latitude;
+    private float latitude;
 
     @Column(nullable = false, precision = 6, scale = 4)
-    private Float longitude;
+    private float longitude;
 
     @Column(nullable = false)
-    private Integer bateria;
+    private int bateria;
 
     @Override
     public int getNoSerie() {
@@ -45,7 +45,7 @@ public class Dispositivo implements IDispositivo{
     }
 
     @Override
-    public void setLatitude(Float latitude) {
+    public void setLatitude(float latitude) {
         this.latitude = latitude;
 
     }
@@ -56,7 +56,7 @@ public class Dispositivo implements IDispositivo{
     }
 
     @Override
-    public void setLongitude(Float longitude) {
+    public void setLongitude(float longitude) {
         this.longitude = longitude;
     }
 

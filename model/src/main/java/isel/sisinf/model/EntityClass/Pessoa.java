@@ -5,23 +5,22 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 interface IPessoa {
-    Integer getId();
+    int getId();
     String getNome();
     String getMorada();
     String getEmail();
     String getTelefone();
     String getNoident();
     String getNacionalidade();
-    String getAtrdisc();
+    char getAtrdisc();
 
-    void setId(Integer id);
     void setNome(String nome);
     void setMorada(String morada);
     void setEmail(String email);
     void setTelefone(String telefone);
     void setNoident(String noident);
     void setNacionalidade(String nacionalidade);
-    void setAtrdisc(String atrdisc);
+    void setAtrdisc(char atrdisc);
 }
 
 @Entity
@@ -29,7 +28,7 @@ interface IPessoa {
 public class Pessoa implements IPessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @Column(length = 40, nullable = false)
     private String nome;
@@ -50,11 +49,11 @@ public class Pessoa implements IPessoa {
     private String nacionalidade;
 
     @Column(nullable = false)
-    private String atrdisc;
+    private char atrdisc;
 
 
     @Override
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -89,13 +88,8 @@ public class Pessoa implements IPessoa {
     }
 
     @Override
-    public String getAtrdisc() {
+    public char getAtrdisc() {
         return atrdisc;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     @Override
@@ -129,23 +123,21 @@ public class Pessoa implements IPessoa {
     }
 
     @Override
-    public void setAtrdisc(String atrdisc) {
+    public void setAtrdisc(char atrdisc) {
         this.atrdisc = atrdisc;
     }
 
     public Pessoa() {}
 
     public Pessoa(
-            Integer id,
             String nome,
             String morada,
             String email,
             String telefone,
             String noident,
             String nacionalidade,
-            String atrdisc
+            char atrdisc
     ) {
-        this.id = id;
         this.nome = nome;
         this.morada = morada;
         this.email = email;

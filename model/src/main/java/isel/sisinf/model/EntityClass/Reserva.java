@@ -5,16 +5,16 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 interface IReserva {
-    Integer getNoreserva();
-    void setNoreserva(Integer noreserva);
+    int getNoreserva();
+    void setNoreserva(int noreserva);
     Loja getLoja();
     void setLoja(Loja loja);
     LocalDateTime getDtinicio();
     void setDtinicio(LocalDateTime dtinicio);
     LocalDateTime getDtfim();
     void setDtfim(LocalDateTime dtfim);
-    Float getValor();
-    void setValor(Float valor);
+    float getValor();
+    void setValor(float valor);
     Bicicleta getBicicleta();
     void setBicicleta(Bicicleta bicicleta);
 }
@@ -44,12 +44,12 @@ public class Reserva implements IReserva {
     private Bicicleta bicicletaUsed;
 
     @Override
-    public Integer getNoreserva() {
+    public int getNoreserva() {
         return noreserva;
     }
 
     @Override
-    public void setNoreserva(Integer noreserva) {
+    public void setNoreserva(int noreserva) {
         this.noreserva = noreserva;
     }
 
@@ -84,12 +84,12 @@ public class Reserva implements IReserva {
     }
 
     @Override
-    public Float getValor() {
+    public float getValor() {
         return valor;
     }
 
     @Override
-    public void setValor(Float valor) {
+    public void setValor(float valor) {
         this.valor = valor;
     }
 

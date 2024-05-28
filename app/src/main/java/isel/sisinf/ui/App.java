@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package isel.sisinf.ui;
 
+import isel.sisinf.model.EntityClass.Pessoa;
+
 import java.util.Scanner;
 import java.util.HashMap;
 
@@ -131,8 +133,34 @@ class UI
     private static final int TAB_SIZE = 24;
 
     private void createCostumer() {
-        // TODO
         System.out.println("createCostumer()");
+        Scanner s = new Scanner(System.in);
+        System.out.print("Name: ");
+        String name = s.nextLine();
+        System.out.print("Email: ");
+        String email = s.nextLine();
+        System.out.print("Address: ");
+        String address = s.nextLine();
+        System.out.print("Phone: ");
+        String phone = s.nextLine();
+        System.out.print("Identification Number: ");
+        String noIdent = s.nextLine();
+        System.out.print("Nationality: ");
+        String nationality = s.nextLine();
+
+        Pessoa p = new Pessoa(
+            name,
+            address,
+            email,
+            phone,
+            noIdent,
+            nationality,
+                'C'
+        );
+
+        // TODO(1): Save the new customer in the database
+        System.out.println(p);
+
     }
   
     private void listExistingBikes() {
