@@ -2,6 +2,7 @@ package isel.sisinf.model.EntityClass;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 interface IReserva {
     Integer getNoreserva();
@@ -44,62 +45,87 @@ public class Reserva implements IReserva {
 
     @Override
     public Integer getNoreserva() {
-        return null;
+        return noreserva;
     }
 
     @Override
     public void setNoreserva(Integer noreserva) {
-
+        this.noreserva = noreserva;
     }
 
     @Override
     public Loja getLoja() {
-        return null;
+        return loja;
     }
 
     @Override
     public void setLoja(Loja loja) {
-
+        this.loja = loja;
     }
 
     @Override
     public LocalDateTime getDtinicio() {
-        return null;
+        return dtinicio;
     }
 
     @Override
     public void setDtinicio(LocalDateTime dtinicio) {
-
+        this.dtinicio = dtinicio;
     }
 
     @Override
     public LocalDateTime getDtfim() {
-        return null;
+        return dtfim;
     }
 
     @Override
     public void setDtfim(LocalDateTime dtfim) {
-
+        this.dtfim = dtfim;
     }
 
     @Override
     public Float getValor() {
-        return null;
+        return valor;
     }
 
     @Override
     public void setValor(Float valor) {
-
+        this.valor = valor;
     }
 
     @Override
     public Bicicleta getBicicleta() {
-        return null;
+        return bicicletaUsed;
     }
 
     @Override
     public void setBicicleta(Bicicleta bicicleta) {
+        this.bicicletaUsed = bicicleta;
     }
 
-    // Getters and Setters
+    @Override
+    public int hashCode() {
+        return Objects.hash(noreserva);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj == null) {
+            return false;
+        } else if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Reserva other = (Reserva) obj;
+        return Objects.equals(noreserva, other.noreserva);
+    }
+
+    @Override
+    public String toString() {
+        return "Reserva[noreserva=" + noreserva + ", loja=" + loja + ", dtinicio=" + dtinicio + ", dtfim=" + dtfim +
+                ", valor=" + valor + ", bicicleta=" + bicicletaUsed + "]";
+    }
+
 }

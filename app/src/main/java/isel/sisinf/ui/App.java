@@ -133,20 +133,16 @@ class UI
     private void createCostumer() {
         // TODO
         System.out.println("createCostumer()");
-
     }
   
-    private void listExistingBikes()
-    {
+    private void listExistingBikes() {
         // TODO
         System.out.println("listExistingBikes()");
     }
 
-    private void checkBikeAvailability()
-    {
+    private void checkBikeAvailability() {
         // TODO
         System.out.println("checkBikeAvailability()");
-
     }
 
     private void obtainBookings() {
@@ -154,21 +150,18 @@ class UI
         System.out.println("obtainBookings()");
     }
 
-    private void makeBooking()
-    {
+    private void makeBooking() {
         // TODO
         System.out.println("makeBooking()");
         
     }
 
-    private void cancelBooking()
-    {
+    private void cancelBooking() {
         // TODO
         System.out.println("cancelBooking");
         
     }
-    private void about()
-    {
+    private void about() {
         System.out.println(
                 """
                 G34T43D
@@ -183,7 +176,7 @@ class UI
     }
 }
 
-public class App{
+public class App {
     public static void main(String[] args) throws Exception{
         UI.getInstance().Run();
     }
