@@ -20,15 +20,27 @@ interface IReserva {
 }
 
 @Entity
+@Table(name = "RESERVA")
 @NamedQuery(name="Reserva.findByKey",
         query="SELECT r FROM Reserva r WHERE r.noreserva =:key")
-@Table(name = "RESERVA")
+@NamedStoredProcedureQuery(
+        name = "make_reserva_procedure",
+        procedureName = "make_reservation",
+        parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Double.class),
+                @StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class),
+        }
+)
 public class Reserva implements IReserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer noreserva;
 
     @ManyToOne
+    @Id
     @JoinColumn(name = "loja", nullable = false)
     private Loja loja;
 
@@ -130,4 +142,13 @@ public class Reserva implements IReserva {
                 ", valor=" + valor + ", bicicleta=" + bicicletaUsed + "]";
     }
 
+    public Reserva() {}
+
+    public Reserva(Loja lojaId, String dtinicio, String dtfim, double valor, Bicicleta bicicleta) {
+        this.loja = lojaId;
+        this.dtinicio = LocalDateTime.parse(dtinicio+"T00:00:00");
+        this.dtfim = LocalDateTime.parse(dtfim+"T00:00:00");
+        this.valor = (float) valor;
+        this.bicicletaUsed = bicicleta;
+    }
 }

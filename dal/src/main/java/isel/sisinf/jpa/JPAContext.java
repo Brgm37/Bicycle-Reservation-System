@@ -26,15 +26,12 @@ package isel.sisinf.jpa;
 import java.util.Collection;
 
 import isel.sisinf.model.EntityClass.Bicicleta;
+import isel.sisinf.model.EntityClass.Loja;
 import isel.sisinf.model.EntityClass.Pessoa;
 import isel.sisinf.model.EntityClass.Reserva;
+import jakarta.persistence.*;
 import org.eclipse.persistence.sessions.DatabaseLogin;
 import org.eclipse.persistence.sessions.Session;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.Query;
 
 public class JPAContext implements IContext {
 
@@ -46,6 +43,7 @@ public class JPAContext implements IContext {
 	private final IPessoaRepository _pessoaRepository;
 	private final IBicicletaRepository _bicicletaRepository;
 	private final IReservaRepository _reservaRepository;
+	private final ILojaRepository _lojaRepository;
     
 /// HELPER METHODS    
     protected Collection helperQueryImpl(String jpql, Object... params) {
@@ -77,6 +75,36 @@ public class JPAContext implements IContext {
 		commit();
 		return entity;
     }
+
+	protected class LojaRepository implements ILojaRepository {
+		@Override
+		public Loja create(Loja entity) {
+			return (Loja)helperCreateImpl(entity);
+		}
+
+		@Override
+		public Loja update(Loja entity) {
+			return (Loja)helperUpdateImpl(entity);
+		}
+
+		@Override
+		public Loja delete(Loja entity) {
+			return (Loja)helperDeleteImpl(entity);
+		}
+
+		@Override
+		public Loja findByKey(Integer key) {
+			return _em.createNamedQuery("Loja.findByKey", Loja.class)
+					.setParameter("key", key)
+					.getSingleResult();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Collection<Loja> find(String jpql, Object... params) {
+			return helperQueryImpl(jpql, params);
+		}
+	}
 
 	protected class PessoaRepository implements IPessoaRepository {
 		@Override
@@ -137,6 +165,17 @@ public class JPAContext implements IContext {
 		public Collection<Bicicleta> find(String jpql, Object... params) {
 			return helperQueryImpl(jpql, params);
 		}
+
+		@Override
+		public boolean availability(int id, String date) {
+			StoredProcedureQuery procedure =
+					_em
+						.createNamedStoredProcedureQuery("bike_availability_procedure");
+			procedure.setParameter(1, id);
+			procedure.setParameter(2, date);
+			procedure.execute();
+			return (boolean)procedure.getOutputParameterValue(3);
+		}
 	}
 
 	protected class ReservaRepository implements IReservaRepository {
@@ -167,6 +206,19 @@ public class JPAContext implements IContext {
 		@Override
 		public Collection<Reserva> find(String jpql, Object... params) {
 			return helperQueryImpl(jpql, params);
+		}
+
+		@Override
+		public void makeBooking(Reserva reserva) {
+			StoredProcedureQuery procedure =
+					_em
+						.createNamedStoredProcedureQuery("make_reserva_procedure");
+			procedure.setParameter(1, reserva.getLoja().getCodigo());
+			procedure.setParameter(2, reserva.getDtinicio().toString());
+			procedure.setParameter(3, reserva.getDtfim().toString());
+			procedure.setParameter(4, reserva.getValor());
+			procedure.setParameter(5, reserva.getBicicleta().getId());
+			procedure.execute();
 		}
 	}
     
@@ -243,6 +295,11 @@ public class JPAContext implements IContext {
 		return _reservaRepository;
 	}
 
+	@Override
+	public ILojaRepository getLojas() {
+		return _lojaRepository;
+	}
+
 	public JPAContext() {
 		this("dal-lab");
 	}
@@ -254,6 +311,7 @@ public class JPAContext implements IContext {
 		this._pessoaRepository = new PessoaRepository();
         this._bicicletaRepository = new BicicletaRepository();
 		this._reservaRepository = new ReservaRepository();
+		this._lojaRepository = new LojaRepository();
 	}
 
 	@Override

@@ -65,7 +65,7 @@ VALUES
   (3, 101, '2022-12-26 12:00:00', '2023-01-07 09:00:00', 100.00, 3);
 
 -- Inserção de dados na tabela TELEFONELOJA
-INSERT INTO TELEFONELOJA (loja, numero)
+INSERT INTO TELEFONELOJA (loja, notelefone)
 VALUES
   (101, '987654321'),
   (102, '123456789'),

@@ -22,6 +22,8 @@ interface ILoja {
 
 @Entity
 @Table(name = "LOJA")
+@NamedQuery(name="Loja.findByKey",
+        query="SELECT l FROM Loja l WHERE l.codigo =:key")
 public class Loja implements ILoja {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +42,9 @@ public class Loja implements ILoja {
     @JoinColumn(name = "gestor", nullable = false)
     private Pessoa gestor;
 
-    public Loja() {}
+    public Loja() {
+        this.gestor = new Pessoa();
+    }
 
     public Loja(Integer codigo, String email, String endereco, String localidade, Pessoa gestor) {
         this.codigo = codigo;

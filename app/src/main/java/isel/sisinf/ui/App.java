@@ -23,12 +23,13 @@ SOFTWARE.
 */
 package isel.sisinf.ui;
 
-import isel.sisinf.jpa.IBicicletaRepository;
-import isel.sisinf.jpa.IContext;
-import isel.sisinf.jpa.IPessoaRepository;
-import isel.sisinf.jpa.JPAContext;
+import isel.sisinf.jpa.*;
+import isel.sisinf.model.EntityClass.Bicicleta;
+import isel.sisinf.model.EntityClass.Loja;
 import isel.sisinf.model.EntityClass.Pessoa;
+import isel.sisinf.model.EntityClass.Reserva;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.HashMap;
 
@@ -169,43 +170,101 @@ class UI
             System.out.println("Costumer created successfully ->" + repository.update(p));
             ctx.commit();
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e);
         }
     }
   
     private void listExistingBikes() {
+        System.out.println("listExistingBikes()");
         try (IContext ctx = new JPAContext()) {
-            System.out.println("listExistingBikes()");
-            ctx.beginTransaction();
             IBicicletaRepository repository = ctx.getBicicletas();
             repository.find("SELECT b FROM Bicicleta b ").forEach(System.out::println);
-            ctx.commit();
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e);
         }
 
     }
 
     private void checkBikeAvailability() {
-        // TODO
         System.out.println("checkBikeAvailability()");
+        try(IContext ctx = new JPAContext()) {
+            Scanner s = new Scanner(System.in);
+            System.out.println("Enter the date: ");
+            String date = s.nextLine();
+            System.out.println("Enter the bike id: ");
+            int id = s.nextInt();
+            IBicicletaRepository repository = ctx.getBicicletas();
+            System.out.println(repository.availability(id, date) ? "Bike is available" : "Bike is not available");
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
     }
 
     private void obtainBookings() {
-        // TODO
         System.out.println("obtainBookings()");
+        try (IContext ctx = new JPAContext()) {
+            IReservaRepository repository = ctx.getReservas();
+            System.out.println("\nReservas: ");
+            repository.find("SELECT r FROM Reserva r").forEach(System.out::println);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
     }
 
     private void makeBooking() {
-        // TODO
         System.out.println("makeBooking()");
+        try(IContext ctx = new JPAContext()) {
+            ctx.beginTransaction();
+            ILojaRepository lojas = ctx.getLojas();
+            IReservaRepository reservas = ctx.getReservas();
+            IBicicletaRepository bicicletas = ctx.getBicicletas();
+            Scanner s = new Scanner(System.in);
+            System.out.println("Enter the start date: ");
+            String start = s.nextLine();
+            System.out.println("Enter the end date: ");
+            String end = s.nextLine();
+            System.out.println("Enter price: ");
+            double price = s.nextDouble();
+            System.out.println("Enter the bike id: ");
+            int id = s.nextInt();
+            Bicicleta bicicleta = bicicletas.findByKey(id);
+            System.out.println("Enter the store id: ");
+            int lojaid = s.nextInt();
+            Loja loja = lojas.findByKey(lojaid);
+            Reserva r = new Reserva(loja, start, end, price, bicicleta);
+            reservas.create(r);
+            ctx.commit();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            System.out.println("Unable to make booking.");
+        }
         
     }
 
     private void cancelBooking() {
-        // TODO
         System.out.println("cancelBooking");
-        
+        try (IContext ctx = new JPAContext()) {
+            Scanner s = new Scanner(System.in);
+            System.out.println("Enter the number of the booking you want to cancel: ");
+            int noreserva = s.nextInt();
+
+            ctx.beginTransaction();
+            IReservaRepository reservas = ctx.getReservas();
+            Reserva r = reservas.findByKey(noreserva);
+            if (!r.getDtfim().isAfter(LocalDateTime.now())) {
+                if (LocalDateTime.now().isAfter(r.getDtinicio())) {
+                    Bicicleta bicicleta = r.getBicicleta();
+                    bicicleta.setEstado("livre");
+                    IBicicletaRepository bicicletas = ctx.getBicicletas();
+                    bicicletas.update(bicicleta);
+                }
+                reservas.delete(r);
+            }
+
+            ctx.commit();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
     private void about() {
         System.out.println(

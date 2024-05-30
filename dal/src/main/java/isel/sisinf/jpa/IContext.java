@@ -14,5 +14,6 @@ public interface IContext extends AutoCloseable {
 	 IPessoaRepository getPessoas();
 	 IBicicletaRepository getBicicletas();
 	 IReservaRepository getReservas();
+	 ILojaRepository getLojas();
 
 }

@@ -22,11 +22,20 @@ interface IBicicleta {
    void setDispositivo(Dispositivo dispositivo);
 }
 
+@Entity
+@Table(name = "BICICLETA")
 @NamedQuery(name="Bicicleta.findByKey",
         query="SELECT b FROM Bicicleta b WHERE b.id =:key"
 )
-@Entity
-@Table(name = "BICICLETA")
+@NamedStoredProcedureQuery(
+        name = "bike_availability_procedure",
+        procedureName = "check_bike_availability",
+        parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(mode = ParameterMode.OUT, type = Boolean.class)
+        }
+)
 public class Bicicleta implements IBicicleta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
