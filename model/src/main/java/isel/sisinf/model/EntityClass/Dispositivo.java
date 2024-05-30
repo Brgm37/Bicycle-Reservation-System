@@ -6,7 +6,7 @@ import java.util.Objects;
 
 interface IDispositivo {
     int getNoSerie();
-    void setNoSerie(int noSerie);
+    void setNoSerie(Integer noSerie);
     float getLatitude();
     void setLatitude(float latitude);
     float getLongitude();
@@ -18,7 +18,7 @@ interface IDispositivo {
 public class Dispositivo implements IDispositivo{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int noSerie;
+    private Integer noSerie;
 
     @Column(nullable = false, precision = 6, scale = 4)
     private float latitude;
@@ -35,7 +35,7 @@ public class Dispositivo implements IDispositivo{
     }
 
     @Override
-    public void setNoSerie(int noSerie) {
+    public void setNoSerie(Integer noSerie) {
         this.noSerie = noSerie;
     }
 

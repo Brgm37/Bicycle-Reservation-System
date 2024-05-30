@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 interface IReserva {
-    int getNoreserva();
-    void setNoreserva(int noreserva);
+    Integer getNoreserva();
+    void setNoreserva(Integer noreserva);
     Loja getLoja();
     void setLoja(Loja loja);
     LocalDateTime getDtinicio();
@@ -20,6 +20,8 @@ interface IReserva {
 }
 
 @Entity
+@NamedQuery(name="Reserva.findByKey",
+        query="SELECT r FROM Reserva r WHERE r.noreserva =:key")
 @Table(name = "RESERVA")
 public class Reserva implements IReserva {
     @Id
@@ -33,7 +35,7 @@ public class Reserva implements IReserva {
     @Column(nullable = false)
     private LocalDateTime dtinicio;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime dtfim;
 
     @Column(nullable = false, precision = 5, scale = 2)
@@ -44,12 +46,12 @@ public class Reserva implements IReserva {
     private Bicicleta bicicletaUsed;
 
     @Override
-    public int getNoreserva() {
+    public Integer getNoreserva() {
         return noreserva;
     }
 
     @Override
-    public void setNoreserva(int noreserva) {
+    public void setNoreserva(Integer noreserva) {
         this.noreserva = noreserva;
     }
 

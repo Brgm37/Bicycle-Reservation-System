@@ -1,18 +1,19 @@
 package isel.sisinf.model.EntityClass;
 
 import jakarta.persistence.*;
-
 import java.util.*;
 
 interface IBicicleta {
-   int getId();
-   void setId(int id);
+   Integer getId();
+   void setId(Integer id);
    double getPeso();
    void setPeso(double peso);
    int getRaio();
    void setRaio(int raio);
    String getModelo();
    void setModelo(String modelo);
+   String getMarca();
+   void setMarca(String marca);
    String getEstado();
    void setEstado(String estado);
    char getAtrdisc();
@@ -20,29 +21,38 @@ interface IBicicleta {
    Dispositivo getDispositivo();
    void setDispositivo(Dispositivo dispositivo);
 }
+
+@NamedQuery(name="Bicicleta.findByKey",
+        query="SELECT b FROM Bicicleta b WHERE b.id =:key"
+)
 @Entity
+@Table(name = "BICICLETA")
 public class Bicicleta implements IBicicleta {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(precision = 4, scale = 2)
     private double peso;
     private int raio;
+    @Column(length = 20)
     private String modelo;
+    @Column(length = 30)
     private String estado;
+    @Column(length = 1)
     private char atrdisc;
     @OneToOne(optional = false)
     private Dispositivo dispositivo;
+    @Column(length = 30)
+    private String marca;
 
-    public Bicicleta() {
-        // TODO
-    }
+    public Bicicleta() {}
 
     @Override
-    public int getId(){
+    public Integer getId(){
         return this.id;
     }
     @Override
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     @Override
@@ -51,9 +61,6 @@ public class Bicicleta implements IBicicleta {
     }
     @Override
     public void setPeso(double peso) {
-//        if(peso < 0) {
-//            throw new IllegalArgumentException("'Peso' must be higher than 0.");
-//        }
         this.peso = peso;
     }
     @Override
@@ -61,12 +68,11 @@ public class Bicicleta implements IBicicleta {
         return this.raio;
     }
     @Override
+
     public void setRaio(int raio) {
-//        if (raio < 13 || raio > 23) {
-//            throw  new IllegalArgumentException("'Raio' must be between 13 and 23.");
-//        }
         this.raio = raio;
     }
+
     @Override
     public String getModelo(){
         return this.modelo;
@@ -75,6 +81,17 @@ public class Bicicleta implements IBicicleta {
     public void setModelo(String modelo) {
         this.modelo = modelo;
     }
+
+    @Override
+    public String getMarca() {
+        return this.marca;
+    }
+
+    @Override
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
     @Override
     public String getEstado() {
         return this.estado;
@@ -104,32 +121,5 @@ public class Bicicleta implements IBicicleta {
         return Objects.hash(id);
     }
 
-//    @OneToMany(mappedBy = "bicicletaUsed", fetch = FetchType.LAZY)
-//    private Set<Reserva> reservas;
-
-//    @Override
-//    public boolean equals(Objects obj) {
-//        if (this == obj)
-//            return true;
-//        if (obj == null)
-//            return false;
-//        if (getClass() != obj.getClass())
-//            return false;
-//        Bicicleta other = (Bicicleta) obj;
-//        return id == other.id;
-//    }
-
-//    private static final int[] mudancas = {1, 6, 18, 24};
-
 }
 
-//id serial primary key,
-//peso numeric(4,2) check (peso >= 0),
-//raio integer check (raio between 13 and 23),
-//modelo varchar(20),
-//marca varchar(30),
-//mudanca integer check (mudanca in (1,6,18,24)),
-//estado varchar(30) check (estado in ('livre', 'ocupado', 'em manutenção')),
-//atrdisc char(1) check (atrdisc in ('C', 'E')),
-//dispositivo integer,
-//foreign key (dispositivo) references dispositivo(noserie)

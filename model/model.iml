@@ -5,7 +5,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
-          <factory-entry name="model" value="f1053961-cd7b-494f-a118-4e055e4631e3" />
+          <factory-entry name="model" value="f1c30a3b-b485-454b-9843-3a0755539ded" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

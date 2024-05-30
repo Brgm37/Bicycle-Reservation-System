@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 interface IPessoa {
-    int getId();
+    Integer getId();
+    void setId(Integer id);
     String getNome();
     String getMorada();
     String getEmail();
@@ -24,11 +25,13 @@ interface IPessoa {
 }
 
 @Entity
+@NamedQuery(name="Pessoa.findByKey",
+        query="SELECT p FROM Pessoa p WHERE p.id =:key")
 @Table(name = "PESSOA")
 public class Pessoa implements IPessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(length = 40, nullable = false)
     private String nome;
@@ -53,8 +56,13 @@ public class Pessoa implements IPessoa {
 
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override

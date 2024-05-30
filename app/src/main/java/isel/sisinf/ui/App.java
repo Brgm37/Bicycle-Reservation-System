@@ -23,6 +23,9 @@ SOFTWARE.
 */
 package isel.sisinf.ui;
 
+import isel.sisinf.jpa.IContext;
+import isel.sisinf.jpa.IPessoaRepository;
+import isel.sisinf.jpa.JPAContext;
 import isel.sisinf.model.EntityClass.Pessoa;
 
 import java.util.Scanner;
@@ -133,6 +136,8 @@ class UI
     private static final int TAB_SIZE = 24;
 
     private void createCostumer() {
+        try (IContext ctx = new JPAContext()) {
+
         System.out.println("createCostumer()");
         Scanner s = new Scanner(System.in);
         System.out.print("Name: ");
@@ -157,10 +162,15 @@ class UI
             nationality,
                 'C'
         );
-
-        // TODO(1): Save the new customer in the database
-        System.out.println(p);
-
+        ctx.beginTransaction();
+        IPessoaRepository repository = ctx.getPessoas();
+        repository.create(p);
+        ctx.flush();
+        System.out.println(repository.update(p));
+        ctx.commit();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
   
     private void listExistingBikes() {

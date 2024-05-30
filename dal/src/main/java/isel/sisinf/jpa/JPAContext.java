@@ -21,11 +21,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package isel.sisinf.dal.lab.repo;
+package isel.sisinf.jpa;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+
+import isel.sisinf.model.EntityClass.Bicicleta;
+import isel.sisinf.model.EntityClass.Pessoa;
+import isel.sisinf.model.EntityClass.Reserva;
 import org.eclipse.persistence.sessions.DatabaseLogin;
 import org.eclipse.persistence.sessions.Session;
 import jakarta.persistence.EntityManager;
@@ -33,9 +35,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
-import jakarta.persistence.StoredProcedureQuery;
-import isel.sisinf.dal.lab.repo.IContext;
-
 
 public class JPAContext implements IContext {
 
@@ -43,16 +42,13 @@ public class JPAContext implements IContext {
     private EntityManager _em;
     private EntityTransaction _tx;
     private int _txcount;
-    
-    //private ICountryRepository _countryRepository;
-//    private IStudentRepository _studentRepository;
-//    private ICourseRepository _courseRepository;
 
-	private IPessoaRepository _pessoaRepository;
+	private final IPessoaRepository _pessoaRepository;
+	private final IBicicletaRepository _bicicletaRepository;
+	private final IReservaRepository _reservaRepository;
     
 /// HELPER METHODS    
-    protected List helperQueryImpl(String jpql, Object... params)
-    {
+    protected Collection helperQueryImpl(String jpql, Object... params) {
     	Query q = _em.createQuery(jpql);
 
 		for(int i = 0; i < params.length; ++i)
@@ -61,71 +57,118 @@ public class JPAContext implements IContext {
 		return q.getResultList();
     }
     
-    protected Object helperCreateImpl(Object entity)
-    {
+    protected Object helperCreateImpl(Object entity) {
     	beginTransaction();
 		_em.persist(entity);
 		commit();
 		return entity;
     }
     
-    protected Object helperUpdateImpl(Object entity)
-    {
+    protected Object helperUpdateImpl(Object entity) {
     	beginTransaction();
 		_em.merge(entity);
 		commit();
 		return entity;	
     }
     
-    protected Object helperDeleteImpl(Object entity)
-    {
+    protected Object helperDeleteImpl(Object entity) {
     	beginTransaction();
 		_em.remove(entity);
 		commit();
 		return entity;
     }
 
-    /*protected class StudentRepository implements IStudentRepository
-    {
+	protected class PessoaRepository implements IPessoaRepository {
+		@Override
+		public Pessoa create(Pessoa entity) {
+			return (Pessoa)helperCreateImpl(entity);
+		}
 
 		@Override
-		public Student findByKey(Integer key) {
-			return _em.createNamedQuery("Student.findByKey",Student.class)
-					 .setParameter("key", key)
-	            	  .getSingleResult();
+		public Pessoa update(Pessoa entity) {
+			return (Pessoa)helperUpdateImpl(entity);
+		}
+
+		@Override
+		public Pessoa delete(Pessoa entity) {
+			return (Pessoa)helperDeleteImpl(entity);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public Collection<Student> find(String jpql, Object... params) {
-			
-			return helperQueryImpl( jpql, params);
-		}
-    	
-		@Override
-		public Collection<Student> getEnrolledStudents(Course c){
-			return _em.createNamedQuery("Student.EnrolledInCourse",Student.class)
-			 .setParameter("key", c.getCourseId())
-			 .getResultList();
+		public Collection<Pessoa> find(String jpql, Object... params) {
+			return helperQueryImpl(jpql, params);
 		}
 
 		@Override
-		public Student create(Student entity) {
-			return (Student)helperCreateImpl(entity);
+		public Pessoa findByKey(Integer key) {
+			return _em.createNamedQuery("Pessoa.findByKey", Pessoa.class)
+					.setParameter("key", key)
+					.getSingleResult();
+		}
+	}
+
+	protected class BicicletaRepository implements IBicicletaRepository {
+
+		@Override
+		public Bicicleta create(Bicicleta entity) {
+			return (Bicicleta)helperCreateImpl(entity);
 		}
 
 		@Override
-		public Student update(Student entity) {
-			return (Student)helperUpdateImpl(entity);
+		public Bicicleta update(Bicicleta entity) {
+			return (Bicicleta)helperUpdateImpl(entity);
 		}
 
 		@Override
-		public Student delete(Student entity) {
-			return (Student)helperDeleteteImpl(entity);
+		public Bicicleta delete(Bicicleta entity) {
+			return (Bicicleta)helperDeleteImpl(entity);
 		}
-		
-    }*/
 
+		@Override
+		public Bicicleta findByKey(Integer key) {
+			return _em.createNamedQuery("Bicicleta.findByKey", Bicicleta.class)
+					.setParameter("key", key)
+					.getSingleResult();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Collection<Bicicleta> find(String jpql, Object... params) {
+			return helperQueryImpl(jpql, params);
+		}
+	}
+
+	protected class ReservaRepository implements IReservaRepository {
+
+		@Override
+		public Reserva create(Reserva entity) {
+			return (Reserva)helperCreateImpl(entity);
+		}
+
+		@Override
+		public Reserva update(Reserva entity) {
+			return (Reserva)helperUpdateImpl(entity);
+		}
+
+		@Override
+		public Reserva delete(Reserva entity) {
+			return (Reserva)helperDeleteImpl(entity);
+		}
+
+		@Override
+		public Reserva findByKey(Integer key) {
+			return _em.createNamedQuery("Reserva.findByKey", Reserva.class)
+					.setParameter("key", key)
+					.getSingleResult();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Collection<Reserva> find(String jpql, Object... params) {
+			return helperQueryImpl(jpql, params);
+		}
+	}
     
 	@Override
 	public void beginTransaction() {
@@ -139,8 +182,7 @@ public class JPAContext implements IContext {
 	}
 	
 	@Override
-	public void beginTransaction(IsolationLevel isolationLevel) 
-	{
+	public void beginTransaction(IsolationLevel isolationLevel) {
 		beginTransaction();
 		Session session =_em.unwrap(Session.class);
 		DatabaseLogin databaseLogin = (DatabaseLogin) session.getDatasourceLogin();
@@ -178,7 +220,6 @@ public class JPAContext implements IContext {
 	@Override
 	public void clear() {
 		_em.clear();
-		
 	}
 
 	@Override
@@ -187,55 +228,41 @@ public class JPAContext implements IContext {
 		
 	}
 
+	@Override
+	public IPessoaRepository getPessoas() {
+		return _pessoaRepository;
+	}
+
+	@Override
+	public IBicicletaRepository getBicicletas() {
+		return _bicicletaRepository;
+	}
+
+	@Override
+	public IReservaRepository getReservas() {
+		return _reservaRepository;
+	}
+
 	public JPAContext() {
 		this("dal-lab");
 	}
 	
-	public JPAContext(String persistentCtx) 
-	{
+	public JPAContext(String persistentCtx) {
 		super();
-	
 		this._emf = Persistence.createEntityManagerFactory(persistentCtx);
 		this._em = _emf.createEntityManager();
-		//this._countryRepository = new CountryRepository();
-//		this._studentRepository = new StudentRepository();
-//		this._courseRepository = new CourseRepository();
+		this._pessoaRepository = new PessoaRepository();
+        this._bicicletaRepository = new BicicletaRepository();
+		this._reservaRepository = new ReservaRepository();
 	}
 
 	@Override
 	public void close() throws Exception {
-		
         if(_tx != null)
         	_tx.rollback();
         _em.close();
         _emf.close();
 	}
 
-	//@Override
-	public ICountryRepository getCountries() {
-		//return _countryRepository;
-		return null; //TODO
-	}
-
-	@Override
-	public IStudentRepository getStudents() {
-		
-		return _studentRepository;
-	}
-	@Override
-	public ICourseRepository getCourses() {
-		return _courseRepository;
-	}
-	// functions and stored procedure
-
-	public java.math.BigDecimal rand_fx(int seed) {
-	
-		StoredProcedureQuery namedrand_fx = 
-		          _em.createNamedStoredProcedureQuery("namedrand_fx");
-		namedrand_fx.setParameter(1, seed);
-		namedrand_fx.execute();
-		
-		return (java.math.BigDecimal)namedrand_fx.getOutputParameterValue(2);
-	}
 
 }

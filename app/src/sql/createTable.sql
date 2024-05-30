@@ -3,7 +3,7 @@ begin;
 create table DISPOSITIVO(
 	noserie integer primary key,
 	latitude numeric(6,4) check (latitude between -90 and 90),
-	longitude numeric(6,4)check (longitude between -180 and 180),
+	longitude numeric(6,4) check (longitude between -180 and 180),
 	bateria integer check (bateria between 0 and 100)
 	);
 
