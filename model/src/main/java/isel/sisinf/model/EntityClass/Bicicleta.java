@@ -41,6 +41,7 @@ public class Bicicleta implements IBicicleta {
     @Column(length = 1)
     private char atrdisc;
     @OneToOne(optional = false)
+    @JoinColumn(name = "dispositivo", referencedColumnName = "noserie")
     private Dispositivo dispositivo;
     @Column(length = 30)
     private String marca;
@@ -119,6 +120,25 @@ public class Bicicleta implements IBicicleta {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj == null) {
+            return false;
+        } else if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Bicicleta other = (Bicicleta) obj;
+        return Objects.equals(id, other.id);
+    }
+
+    @Override
+    public String toString() {
+        return "Bicicleta[id=" + id + ", peso=" + peso + ", raio=" + raio + ", modelo=" + modelo + ", marca=" + marca +
+                ", estado=" + estado + ", atrdisc=" + atrdisc + ", dispositivo=" + dispositivo + "]";
     }
 
 }

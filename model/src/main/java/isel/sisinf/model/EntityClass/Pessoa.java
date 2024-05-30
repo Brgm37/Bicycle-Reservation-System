@@ -24,10 +24,11 @@ interface IPessoa {
     void setAtrdisc(char atrdisc);
 }
 
-@Entity
+
 @NamedQuery(name="Pessoa.findByKey",
         query="SELECT p FROM Pessoa p WHERE p.id =:key")
 @Table(name = "PESSOA")
+@Entity
 public class Pessoa implements IPessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

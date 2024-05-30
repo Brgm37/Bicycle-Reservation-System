@@ -23,6 +23,7 @@ SOFTWARE.
 */
 package isel.sisinf.ui;
 
+import isel.sisinf.jpa.IBicicletaRepository;
 import isel.sisinf.jpa.IContext;
 import isel.sisinf.jpa.IPessoaRepository;
 import isel.sisinf.jpa.JPAContext;
@@ -137,45 +138,52 @@ class UI
 
     private void createCostumer() {
         try (IContext ctx = new JPAContext()) {
+            System.out.println("createCostumer()");
+            Scanner s = new Scanner(System.in);
+            System.out.print("Name: ");
+            String name = s.nextLine();
+            System.out.print("Email: ");
+            String email = s.nextLine();
+            System.out.print("Address: ");
+            String address = s.nextLine();
+            System.out.print("Phone: ");
+            String phone = s.nextLine();
+            System.out.print("Identification Number: ");
+            String noIdent = s.nextLine();
+            System.out.print("Nationality: ");
+            String nationality = s.nextLine();
 
-        System.out.println("createCostumer()");
-        Scanner s = new Scanner(System.in);
-        System.out.print("Name: ");
-        String name = s.nextLine();
-        System.out.print("Email: ");
-        String email = s.nextLine();
-        System.out.print("Address: ");
-        String address = s.nextLine();
-        System.out.print("Phone: ");
-        String phone = s.nextLine();
-        System.out.print("Identification Number: ");
-        String noIdent = s.nextLine();
-        System.out.print("Nationality: ");
-        String nationality = s.nextLine();
-
-        Pessoa p = new Pessoa(
-            name,
-            address,
-            email,
-            phone,
-            noIdent,
-            nationality,
-                'C'
-        );
-        ctx.beginTransaction();
-        IPessoaRepository repository = ctx.getPessoas();
-        repository.create(p);
-        ctx.flush();
-        System.out.println(repository.update(p));
-        ctx.commit();
+            Pessoa p = new Pessoa(
+                name,
+                address,
+                email,
+                phone,
+                noIdent,
+                nationality,
+                    'C'
+            );
+            ctx.beginTransaction();
+            IPessoaRepository repository = ctx.getPessoas();
+            repository.create(p);
+            ctx.flush();
+            System.out.println("Costumer created successfully ->" + repository.update(p));
+            ctx.commit();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
   
     private void listExistingBikes() {
-        // TODO
-        System.out.println("listExistingBikes()");
+        try (IContext ctx = new JPAContext()) {
+            System.out.println("listExistingBikes()");
+            ctx.beginTransaction();
+            IBicicletaRepository repository = ctx.getBicicletas();
+            repository.find("SELECT b FROM Bicicleta b ").forEach(System.out::println);
+            ctx.commit();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
     private void checkBikeAvailability() {

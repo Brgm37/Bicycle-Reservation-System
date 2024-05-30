@@ -4,14 +4,22 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <persistence-unit name="dal-lab" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>isel.sisinf.model.EntityClass.Pessoa</class>
+        <class>isel.sisinf.model.EntityClass.Bicicleta</class>
+        <class>isel.sisinf.model.EntityClass.Reserva</class>
+        <class>isel.sisinf.model.EntityClass.Loja</class>
+        <class>isel.sisinf.model.EntityClass.Dispositivo</class>
+        <class>isel.sisinf.model.EntityClass.TelefoneLoja</class>
+        <class>isel.sisinf.model.EntityClass.Eletrica</class>
+        <class>isel.sisinf.model.EntityClass.Classica</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <properties>
 			
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/SI"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="Edn@1912"/>
+            <property name="jakarta.persistence.jdbc.password" value="isi30"/>
 
 
 			<property name="eclipselink.logging.level" value="INFO"/>
