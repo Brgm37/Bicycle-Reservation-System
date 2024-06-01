@@ -5,7 +5,9 @@
     <file url="file://$PROJECT_DIR$/app/src/sql/deleteTable.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/app/src/sql/functions.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/app/src/sql/insertTable.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/app/src/sql/procedures.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/app/src/sql/removeTable.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/app/src/sql/triggers.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>

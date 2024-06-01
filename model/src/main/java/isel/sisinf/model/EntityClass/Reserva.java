@@ -22,7 +22,8 @@ interface IReserva {
 @Entity
 @Table(name = "RESERVA")
 @NamedQuery(name="Reserva.findByKey",
-        query="SELECT r FROM Reserva r WHERE r.noreserva =:key")
+        query="SELECT r FROM Reserva r WHERE r.key =:key"
+)
 @NamedStoredProcedureQuery(
         name = "make_reserva_procedure",
         procedureName = "make_reservation",
@@ -35,17 +36,17 @@ interface IReserva {
         }
 )
 public class Reserva implements IReserva {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer noreserva;
 
-    @ManyToOne
-    @Id
-    @JoinColumn(name = "loja", nullable = false)
-    private Loja loja;
+    @EmbeddedId
+    private ReservaKey key;
 
     @Column(nullable = false)
     private LocalDateTime dtinicio;
+
+    @MapsId("loja")
+    @ManyToOne
+    @JoinColumn(name = "loja", referencedColumnName = "codigo")
+    private Loja loja;
 
     @Column
     private LocalDateTime dtfim;
@@ -59,12 +60,12 @@ public class Reserva implements IReserva {
 
     @Override
     public Integer getNoreserva() {
-        return noreserva;
+        return key.getNoReserva();
     }
 
     @Override
     public void setNoreserva(Integer noreserva) {
-        this.noreserva = noreserva;
+        this.key.setNoReserva(noreserva);
     }
 
     @Override
@@ -119,7 +120,7 @@ public class Reserva implements IReserva {
 
     @Override
     public int hashCode() {
-        return Objects.hash(noreserva);
+        return Objects.hash(key);
     }
 
     @Override
@@ -133,18 +134,21 @@ public class Reserva implements IReserva {
         }
 
         Reserva other = (Reserva) obj;
-        return Objects.equals(noreserva, other.noreserva);
+        return Objects.equals(key, other.key);
     }
 
     @Override
     public String toString() {
-        return "Reserva[noreserva=" + noreserva + ", loja=" + loja + ", dtinicio=" + dtinicio + ", dtfim=" + dtfim +
+        return "Reserva[noreserva=" + key + ", loja=" + loja +", dtinicio=" + dtinicio + ", dtfim=" + dtfim +
                 ", valor=" + valor + ", bicicleta=" + bicicletaUsed + "]";
     }
 
-    public Reserva() {}
+    public Reserva() {
+        this.key = new ReservaKey();
+    }
 
     public Reserva(Loja lojaId, String dtinicio, String dtfim, double valor, Bicicleta bicicleta) {
+        this.key = new ReservaKey();
         this.loja = lojaId;
         this.dtinicio = LocalDateTime.parse(dtinicio+"T00:00:00");
         this.dtfim = LocalDateTime.parse(dtfim+"T00:00:00");

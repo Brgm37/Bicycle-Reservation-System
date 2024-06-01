@@ -11,3 +11,12 @@ BEGIN
     RETURN is_available;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION delete_cliente_reserva()
+    RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM clientereserva
+    WHERE reserva = OLD.noreserva and loja = OLD.loja;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
