@@ -17,9 +17,9 @@
         <properties>
 			
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres"/>
-            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="Edn@1912"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://sisinfvlab2.dyn.fil.isel.pt:5432/t43dg34"/>
+            <property name="jakarta.persistence.jdbc.user" value="t43dg34"/>
+            <property name="jakarta.persistence.jdbc.password" value="t43dg34"/>
 
 
 			<property name="eclipselink.logging.level" value="INFO"/>

@@ -205,6 +205,10 @@ public class JPAContext implements IContext {
 			return helperQueryImpl(jpql, params);
 		}
 
+//		private String localDateToString(java.time.LocalDateTime date) {
+//			return date.toString().replace('T', ' ');
+//		}
+
 		@Override
 		public void makeBooking(Reserva reserva) {
 			StoredProcedureQuery procedure =

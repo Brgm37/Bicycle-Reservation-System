@@ -34,7 +34,7 @@ interface IReserva {
                 @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class),
                 @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class),
                 @StoredProcedureParameter(mode = ParameterMode.IN, type = Double.class),
-                @StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class)
         }
 )
 public class Reserva implements IReserva {

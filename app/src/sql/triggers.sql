@@ -7,3 +7,5 @@ CREATE OR REPLACE TRIGGER add_reserva
     BEFORE INSERT ON reserva
     FOR EACH ROW
 EXECUTE FUNCTION add_reserva();
+
+
