@@ -20,3 +20,24 @@ BEGIN
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION add_reserva()
+    RETURNS TRIGGER AS $$
+DECLARE
+    total_bikes INTEGER;
+    rented_bikes INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO total_bikes
+    FROM Bicicleta
+    WHERE estado = 'livre';
+
+    SELECT COUNT(*) INTO rented_bikes
+    FROM Bicicleta
+    WHERE estado = 'em reserva';
+
+    IF rented_bikes < total_bikes*0.1 THEN
+        RAISE EXCEPTION 'Unable to add reservation. rented bikes = %, total bikes = %', rented_bikes, total_bikes;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;

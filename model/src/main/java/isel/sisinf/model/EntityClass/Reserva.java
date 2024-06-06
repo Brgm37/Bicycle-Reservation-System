@@ -17,6 +17,8 @@ interface IReserva {
     void setValor(float valor);
     Bicicleta getBicicleta();
     void setBicicleta(Bicicleta bicicleta);
+    int setVersion(int version);
+    int getVersion();
 }
 
 @Entity
@@ -57,6 +59,19 @@ public class Reserva implements IReserva {
     @ManyToOne
     @JoinColumn(name = "bicicleta", nullable = false, referencedColumnName = "id")
     private Bicicleta bicicletaUsed;
+
+    @Version
+    private int version;
+
+    @Override
+    public int getVersion() {
+        return version;
+    }
+
+    @Override
+    public int setVersion(int version) {
+        return this.version = version;
+    }
 
     @Override
     public Integer getNoreserva() {

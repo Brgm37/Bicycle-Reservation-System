@@ -25,6 +25,7 @@ package isel.sisinf.ui;
 
 import isel.sisinf.jpa.*;
 import isel.sisinf.model.EntityClass.*;
+import jakarta.persistence.OptimisticLockException;
 
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -253,7 +254,8 @@ class UI
             ctx.beginTransaction();
             IReservaRepository reservas = ctx.getReservas();
             Reserva r = reservas.findByKey(key);
-            if (!r.getDtfim().isAfter(LocalDateTime.now())) {
+            System.out.println("Booking to cancel: " + r);
+            if (r.getDtfim().isAfter(LocalDateTime.now())) {
                 if (LocalDateTime.now().isAfter(r.getDtinicio())) {
                     Bicicleta bicicleta = r.getBicicleta();
                     bicicleta.setEstado("livre");
@@ -264,10 +266,15 @@ class UI
             }
             ctx.commit();
             System.out.println("Booking canceled successfully.");
-        } catch (Exception e) {
+        } catch (OptimisticLockException e) {
+            System.out.println("The booking has been modified by another transaction. Please try again.");
+            System.out.println("Error: " + e.getMessage());
+        }
+        catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
     private void about() {
         System.out.println(
                 """

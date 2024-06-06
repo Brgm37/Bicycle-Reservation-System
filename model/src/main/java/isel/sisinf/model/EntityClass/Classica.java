@@ -4,11 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
+import java.util.Objects;
+
 interface IClassica {
     Bicicleta getBicicleta();
     void setBicicleta(Bicicleta bicicleta);
-    int getNrMudacas();
-    void setNrMudacas(int nrMudacas);
 }
 
 @Entity
@@ -17,29 +17,44 @@ public class Classica implements IClassica {
     @Id
     @OneToOne
     private Bicicleta bicicleta;
+
     @Override
     public Bicicleta getBicicleta() {
-        // TODO Auto-generated method stub
-        return null;
+        return bicicleta;
     }
 
     @Override
     public void setBicicleta(Bicicleta bicicleta) {
-        // TODO Auto-generated method stub
+        this.bicicleta = bicicleta;
+    }
+
+    public Classica() {}
+
+    public Classica(Bicicleta bicicleta) {
+        this.bicicleta = bicicleta;
     }
 
     @Override
-    public int getNrMudacas() {
-        // TODO Auto-generated method stub
-        return 0;
+    public String toString() {
+        return "Classica[bicicleta=" + bicicleta.getId() + "]";
     }
 
     @Override
-    public void setNrMudacas(int nrMudacas) {
-        // TODO Auto-generated method stub
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj == null) {
+            return false;
+        } else if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Classica other = (Classica)obj;
+        return Objects.equals(bicicleta, other.bicicleta);
     }
 
-    public Classica() {
-        // TODO Auto-generated constructor stub
+    @Override
+    public int hashCode() {
+        return Objects.hash(bicicleta);
     }
 }

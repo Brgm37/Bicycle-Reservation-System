@@ -14,16 +14,16 @@ create table BICICLETA (
 	modelo varchar(20),
 	marca varchar(30),
 	mudanca integer check (mudanca in (1,6,18,24)),
-	estado varchar(30) check (estado in ('livre', 'ocupado', 'em manutenção')),
+	estado varchar(30) check (estado in ('livre', 'ocupado', 'em manutenção', 'em reserva')),
 	atrdisc char(1) check (atrdisc in ('C', 'E')),
 	dispositivo integer,
+    version integer not null default 0,
 	foreign key (dispositivo) references dispositivo(noserie)
 	);
 
 create table CLASSICA(
 	bicicleta integer, 
-	foreign key (bicicleta) references bicicleta(id),
-	nomudanca integer check (nomudanca between 0 and 5)
+	foreign key (bicicleta) references bicicleta(id)
 );
 
 create table ELETRICA(
@@ -62,6 +62,7 @@ create table RESERVA(
 	dtfim timestamp,
 	valor numeric(5,2),
 	bicicleta serial,
+    version integer not null default 0,
 	foreign key(bicicleta) references bicicleta(id),
 	foreign key(loja) references loja(codigo)
 );
@@ -82,3 +83,5 @@ create table CLIENTERESERVA(
 );
 
 commit;
+
+rollback;

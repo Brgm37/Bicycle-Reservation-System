@@ -20,6 +20,8 @@ interface IBicicleta {
    void setAtrdisc(char atrdisc);
    Dispositivo getDispositivo();
    void setDispositivo(Dispositivo dispositivo);
+   int getVersion();
+   void setVersion(int version);
 }
 
 @Entity
@@ -54,6 +56,19 @@ public class Bicicleta implements IBicicleta {
     private Dispositivo dispositivo;
     @Column(length = 30)
     private String marca;
+
+    @Version
+    private int version;
+
+    @Override
+    public int getVersion() {
+        return version;
+    }
+
+    @Override
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     public Bicicleta() {}
 

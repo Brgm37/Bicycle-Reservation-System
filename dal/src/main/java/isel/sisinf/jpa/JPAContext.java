@@ -250,13 +250,18 @@ public class JPAContext implements IContext {
 
 	@Override
 	public void commit() {
-		
-		--_txcount;
-		if(_txcount==0 && _tx != null)
-		{
-			_em.flush();
-			_tx.commit();
-			_tx = null;
+
+		try {
+			--_txcount;
+			if(_txcount==0 && _tx != null)
+			{
+				_em.flush();
+				_tx.commit();
+				_tx = null;
+			}
+		} catch (Exception e) {
+			_tx.rollback();
+			throw e;
 		}
 	}
 
