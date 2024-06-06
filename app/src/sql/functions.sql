@@ -41,3 +41,18 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION make_reservation(
+    IN p_loja INTEGER,
+    IN p_dtinicio CHARACTER VARYING(50),
+    IN p_dtfim CHARACTER VARYING(50),
+    IN p_valor REAL,
+    IN p_bicicleta INTEGER
+)
+    RETURNS VOID AS $$
+BEGIN
+    INSERT INTO RESERVA(loja, dtinicio, dtfim, valor, bicicleta)
+    VALUES (p_loja, p_dtinicio::timestamp, p_dtfim::timestamp, p_valor, p_bicicleta);
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;

@@ -230,7 +230,7 @@ class UI
             int lojaid = s.nextInt();
             Loja loja = lojas.findByKey(lojaid);
             Reserva r = new Reserva(loja, start, end, price, bicicleta);
-            reservas.create(r);
+            reservas.makeBooking(r);
             ctx.flush();
             System.out.println("Booking created successfully -> " + reservas.update(r));
             ctx.commit();
