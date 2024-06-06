@@ -24,10 +24,8 @@ SOFTWARE.
 package isel.sisinf.ui;
 
 import isel.sisinf.jpa.*;
-import isel.sisinf.model.EntityClass.Bicicleta;
-import isel.sisinf.model.EntityClass.Loja;
-import isel.sisinf.model.EntityClass.Pessoa;
-import isel.sisinf.model.EntityClass.Reserva;
+import isel.sisinf.model.EntityClass.*;
+import jakarta.persistence.OptimisticLockException;
 
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -233,6 +231,8 @@ class UI
             Loja loja = lojas.findByKey(lojaid);
             Reserva r = new Reserva(loja, start, end, price, bicicleta);
             reservas.create(r);
+            ctx.flush();
+            System.out.println("Booking created successfully -> " + reservas.update(r));
             ctx.commit();
         } catch (Exception e) {
             System.out.println("Error: " + e);
@@ -247,11 +247,15 @@ class UI
             Scanner s = new Scanner(System.in);
             System.out.println("Enter the number of the booking you want to cancel: ");
             int noreserva = s.nextInt();
+            System.out.println("Enter the store id: ");
+            int lojaid = s.nextInt();
+            ReservaKey key = new ReservaKey(noreserva, lojaid);
 
             ctx.beginTransaction();
             IReservaRepository reservas = ctx.getReservas();
-            Reserva r = reservas.findByKey(noreserva);
-            if (!r.getDtfim().isAfter(LocalDateTime.now())) {
+            Reserva r = reservas.findByKey(key);
+            System.out.println("Booking to cancel: " + r);
+            if (r.getDtfim().isAfter(LocalDateTime.now())) {
                 if (LocalDateTime.now().isAfter(r.getDtinicio())) {
                     Bicicleta bicicleta = r.getBicicleta();
                     bicicleta.setEstado("livre");
@@ -260,12 +264,17 @@ class UI
                 }
                 reservas.delete(r);
             }
-
             ctx.commit();
-        } catch (Exception e) {
+            System.out.println("Booking canceled successfully.");
+        } catch (OptimisticLockException e) {
+            System.out.println("The booking has been modified by another transaction. Please try again.");
+            System.out.println("Error: " + e.getMessage());
+        }
+        catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
     private void about() {
         System.out.println(
                 """

@@ -25,10 +25,7 @@ package isel.sisinf.jpa;
 
 import java.util.Collection;
 
-import isel.sisinf.model.EntityClass.Bicicleta;
-import isel.sisinf.model.EntityClass.Loja;
-import isel.sisinf.model.EntityClass.Pessoa;
-import isel.sisinf.model.EntityClass.Reserva;
+import isel.sisinf.model.EntityClass.*;
 import jakarta.persistence.*;
 import org.eclipse.persistence.sessions.DatabaseLogin;
 import org.eclipse.persistence.sessions.Session;
@@ -196,7 +193,7 @@ public class JPAContext implements IContext {
 		}
 
 		@Override
-		public Reserva findByKey(Integer key) {
+		public Reserva findByKey(ReservaKey key) {
 			return _em.createNamedQuery("Reserva.findByKey", Reserva.class)
 					.setParameter("key", key)
 					.getSingleResult();
@@ -253,13 +250,18 @@ public class JPAContext implements IContext {
 
 	@Override
 	public void commit() {
-		
-		--_txcount;
-		if(_txcount==0 && _tx != null)
-		{
-			_em.flush();
-			_tx.commit();
-			_tx = null;
+
+		try {
+			--_txcount;
+			if(_txcount==0 && _tx != null)
+			{
+				_em.flush();
+				_tx.commit();
+				_tx = null;
+			}
+		} catch (Exception e) {
+			_tx.rollback();
+			throw e;
 		}
 	}
 

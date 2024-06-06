@@ -42,6 +42,8 @@ public class Loja implements ILoja {
     @JoinColumn(name = "gestor", nullable = false)
     private Pessoa gestor;
 
+
+
     public Loja() {
         this.gestor = new Pessoa();
     }
